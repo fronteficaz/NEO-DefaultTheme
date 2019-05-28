@@ -36,6 +36,9 @@ headlogo {
 
     .searchcolumn {
         .ui.icon.input > i.icon {
+            border-radius: 100%;
+            background-color: $primary-color;
+            color: #fff;
             opacity: initial;
         }
 
