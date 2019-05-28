@@ -20,13 +20,13 @@
 
     function slickGallery() {
         $('.car-gallery').slick({
-            prevArrow: '<a class="slick-prev ui mini button basic black icon"><i class="chevron left icon"></i></a>',
+            infinite: false,
+            mobileFirst: true,
             nextArrow: '<a class="slick-next ui mini button basic black icon"><i class="chevron right icon"></i></a>',
-            dots: false,
+            prevArrow: '<a class="slick-prev ui mini button basic black icon"><i class="chevron left icon"></i></a>',
             slidesToShow: 3,
-            mobileFirst:true,
-            useTransform:false,
-            infinite:false
+            useTransform: false,
+            vertical: true
         });
     }
 </script>

@@ -37,7 +37,20 @@
 
 
             }
+
+            if(Model.PricePromotion != null && Model.PricePromotion > 0) {
+                int discount = Convert.ToInt32(100 - (Model.PricePromotion / Model.Price) * 100);
+
+                <div class="discount">-@discount% Off</div>
+            }
         }
+
+        <div class="sku-options mobile-hide tablet-hide @(Model.AvailableReferences != null ? "mask" : "") @(Session["segment"] != null && Session["segment"].ToString() == "b2b" ? "hideme" : string.Empty)">
+            <span id="produto-esgotado_@Model.IdProduct" class="text center produto-esgotado-label hideme @(Model.FlagExhausted ? " " : "hideme" )">Produto Esgotado</span>
+            <a id="btn-comprar-card-@Model.IdProduct" title="Comprar" class="ui labeled icon button action fluid btn-comprar-card text uppercase" data-idproduct="@Model.IdProduct" data-name="@Model.Name">
+                <i id="btn-icon-card-@Model.IdProduct" class="icon add to cart"></i>
+            </a>
+        </div>
 
         @{
             bool isb2b = Session["segment"] != null && Session["segment"].ToString() == "b2b" ? true : false;
@@ -50,7 +63,7 @@
             {
                 <div class="ui top right attached label massive wishlist">
                     <div class="bcg-heart wishlist-btn" data-wishlist-local="card" data-tooltip="@textListaDesejo" data-position="top right">
-                        <i class="wishlist-item icon heart @color" data-in-list="@inlist" data-have-sku="@(Model.AvailableReferences != null && Model.AvailableReferences.Count() > 0 ? "true" : "false")" data-product-id="@Model.IdProduct"></i>
+                        <i class="wishlist-item icon heart" data-in-list="@inlist" data-have-sku="@(Model.AvailableReferences != null && Model.AvailableReferences.Count() > 0 ? "true" : "false")" data-product-id="@Model.IdProduct"></i>
                     </div>
                 </div>
             }
@@ -81,96 +94,9 @@
                 }
             </a>
         }
-        <div class="ui horizontal divider avaliacao">
-            <div class="ui tiny star rating" data-rating="@Model.Rate.Value.ToString().Replace(",", ".")"></div>
-        </div>
 
         <div class="info">
 
-            <div class="sku-options mobile-hide tablet-hide @(Model.AvailableReferences != null ? "mask" : "") @(Session["segment"] != null && Session["segment"].ToString() == "b2b" ? "hideme" : string.Empty)">
-
-                <span id="produto-esgotado_@Model.IdProduct" class="text center produto-esgotado-label hideme @(Model.FlagExhausted ? " " : "hideme" )">Produto Esgotado</span>
-
-                @if (Model.AvailableReferences != null)
-                {
-                    <input type="hidden" name="produto-sku" id="produto-sku" value="" />
-                    foreach (var reference in Model.AvailableReferences)
-                    {
-                        <div id="referencefromproduct_@Model.IdProduct" class="ui fluid selection dropdown dropdownreference" data-total-referencia="@(Model.AvailableReferences != null ? Model.AvailableReferences.Count() : 0)" data-idproduct="@Model.IdProduct">
-                            <input type="hidden" name="reference_@Model.IdProduct" data-id-reference="@reference.IdReference" id="@reference.Name">
-                            <i class="dropdown icon"></i>
-                            <span class="text">@reference.Name</span>
-                            <div class="menu">
-                                <div class="header">
-                                    @reference.Name
-                                </div>
-                                <div class="scrolling menu">
-                                    @foreach (var variation in reference.Variations)
-                                    {
-                                        combinacoes = "";
-                                        if (Model.SKUs != null)
-                                        {
-                                            foreach (var skus in Model.SKUs)
-                                            {
-                                                if (!LojaCorp.Control.Company._Company.ShowProductOutOfStock || (LojaCorp.Control.Company._Company.ShowProductOutOfStock && skus.Stock > 0 && (skus.Price > 0 || skus.PricePromotion > 0)))
-                                                {
-                                                    if (skus.Variations.Where(c => c.IdVariation == variation.IdVariation).ToArray().Count() > 0)
-                                                    {
-                                                        var sku = skus.Variations;
-                                                        foreach (var Variacao in skus.Variations)
-                                                        {
-                                                            combinacoes += "|" + Variacao.IdVariation;
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        if (combinacoes != "") { 
-                                            <div class="item" data-value="@variation.IdVariation" data-sku="@combinacoes">
-                                                @if (variation.Color != null)
-                                                {
-                                                    <div class="ui empty circular label" style="background-color: @LojaCorp.Control.Static.HexaToRgb(variation.Color) !important; border-color: #1B1C1D !important;"></div>
-                                                }
-                                                @variation.Name
-                                            </div>
-                                        }
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui small divider hidden"></div>
-                    }
-                }
-                <!-- Verificar se o produto é conjunto -->
-                @if (Model.HasConjunct)
-                {
-                    <a href="@(Model.UrlFriendlyCustom != null ? Model.UrlFriendlyCustom : Model.UrlFriendly)" title="Comprar" class="ui labeled icon button action fluid btn-comprar text uppercase" data-idproduct="@Model.IdProduct" data-name="Model.Name">
-                        <i id="btn-icon-card-Model.IdProduct" class="icon announcement"></i>
-                        Comprar
-                    </a>
-                }
-                else if (Model.FlagExhausted || Model.Stock <= 0)
-                {
-                    <a id="btn-comprar-card-@Model.IdProduct" title="Avise-me" class="ui labeled icon button grey fluid avise-card avise-me-modal text uppercase" data-idproduct="@Model.IdProduct" data-name="@Model.Name">
-                        <i id="btn-icon-card-@Model.IdProduct" class="icon announcement"></i>
-                        Avise-me
-                    </a>
-                }
-                else if (Session["EventList"] != null)
-                {
-                    <a id="add-event-list-@Model.IdProduct" title="Adicionar à Lista" class="ui labeled icon button primary fluid add-event-list text uppercase" data-idproduct="@Model.IdProduct" data-name="@Model.Name">
-                        <i id="btn-icon-card-@Model.IdProduct" class="icon add to cart"></i>
-                        Adicionar à Lista
-                    </a>
-                }
-                else
-                {
-                    <a id="btn-comprar-card-@Model.IdProduct" title="Comprar" class="ui labeled icon button action fluid btn-comprar-card text uppercase" data-idproduct="@Model.IdProduct" data-name="@Model.Name">
-                        <i id="btn-icon-card-@Model.IdProduct" class="icon add to cart"></i>
-                        Comprar
-                    </a>
-                }
-            </div>
             <div class="dados">
                 <a href="@(Model.UrlFriendlyCustom != null ? Model.UrlFriendlyCustom : Model.UrlFriendly)" title="@Model.Name">
                     <h3>
@@ -184,7 +110,7 @@
                     <meta itemprop="priceCurrency" content="BRL" />
                     @if (Model.PricePromotion != null && Model.PricePromotion > 0)
                     {
-                        <span id="basePrice_@Model.IdProduct" class="precoBase">de <i>@string.Format("{0:c}", Model.Price)</i> por @(Session["segment"] != null && Session["segment"].ToString() == "b2b" && Model.AvailableReferences != null ? "a partir de" : string.Empty)</span>
+                        <span id="basePrice_@Model.IdProduct" class="precoBase"><i>@string.Format("{0:c}", Model.Price)</i>@(Session["segment"] != null && Session["segment"].ToString() == "b2b" && Model.AvailableReferences != null ? "a partir de" : string.Empty)</span>
                         <span class="preco">R$ <span itemprop="price">@string.Format("{0:n2}", Model.PricePromotion)</span></span>
 
                     }
@@ -197,17 +123,8 @@
                             R$ @string.Format("{0:n2}", Model.Price)
                         </span>
                     }
-                    @if (Model.InstallmentMax != null)
-                    {
-                        <span class="parcelamento">
-                            ou em <span class="installmentMaxNumber">@Model.InstallmentMax.MaxNumber</span>
-                            x de <span class="installmentMaxValue">@string.Format("{0:c}", Model.InstallmentMax.Value)</span>
-                        </span>
-                    }
-
                     @if (Model.Stock >= 0 && !Model.FlagExhausted)
                     {
-                        <br /><br />
                         <span class="text color grey regular parcelamento small">
                             @Model.DescriptionAvailabilityStatus
                         </span>
@@ -254,10 +171,6 @@
                         Comprar
                     </a>
                 }
-
-                <a class="ui button btnDetalhes mobile-hide tablet-hide" href="@(Model.UrlFriendlyCustom != null ? Model.UrlFriendlyCustom : Model.UrlFriendly)">
-                    <i class="icon search"></i>Detalhes
-                </a>
             </div>
         </div>
     </div>

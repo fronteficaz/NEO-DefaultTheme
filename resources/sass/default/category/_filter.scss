@@ -11,28 +11,55 @@
     }
   }
   .ui.accordion {
-    .title {
-      font-weight: bold;
-      font-size: 14px;
-      color: $primary-color;
-      text-transform: uppercase;
-      padding-left: 15px;
-      box-shadow: inset 3px 0 0 #EEEEEE;
-      margin-bottom: 10px;
-      &.active {
-        border-top: 3px solid #EEEEEE;
-        border-bottom: 3px solid #EEEEEE;
-        box-shadow:none;
+    .col-4 {
+      float: left;
+      width: calc(25% - 5px);
+      margin-right: 5px;
+      padding: 10px;
+      border: 1px solid #eee;
+
+      &:last-child {
+        margin-right: 0;
       }
+    }
+
+    .title {
+      margin-bottom: 10px;
+      padding-left: 0;
+      box-shadow: inset 3px 0 0 #eee;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #000;
+
+      &.active {
+        box-shadow: none;
+      }
+
       .icon {
         float: right;
         margin-top: 3px;
       }
       
-      >span {
-        word-break: break-word;
-        max-width: 120px;
+      > span {
         display: inline-block;
+        max-width: 120px;
+        word-break: break-word;
+      }
+    }
+
+    .ui.form {
+      .ui.labeled.icon.button {
+        background-color: #2cba4c;
+        color: #fff;
+
+        > .icon {
+          background-color: #28a643;
+          color: #fff;
+        }
+      }
+      .field > .button {
+        border-radius: 100%;
       }
     }
   }

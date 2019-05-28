@@ -6,18 +6,36 @@
   <div class="ui container">
     <div class="ui middle aligned four column centered grid">
       <div class="row">
-        <div class="ui five wide mobile five wide tablet four wide computer column">
-          <a href="/Home" title="Página Inicial">
-            <img class="ui middle aligned image logo" src="/assets/image/logo/logo.png" alt="@LojaCorp.Control.Company._Company.FantasyName" title="@LojaCorp.Control.Company._Company.FantasyName">
-          </a>
-        </div>
-        <div class="ui center aligned six wide tablet seven wide computer column searchcolumn">
-          <div class="ui category @_classSearch">
-            <div class="ui icon input fluid">
-              <input class="prompt" type="text" placeholder="Buscar...">
+        <div class="ui right aligned eight wide mobile three wide tablet three wide computer column">
+          <div id="cartButton" class="ui labeled button cartbutton no margin bottom @_classMiniCart" tabindex="0" data-segment="@(Session["segment"] != null ? Session["segment"] : "b2c")">
+            <div class="ui basic primary button ">
+              <i class="cart icon"></i>
+            </div>
+            <a class="ui left pointing primary label" id="total_itens_card">
+              @{
+                if (Session["EventList"] == null)
+                {
+                  @Html.Action("TotalItensCart", "Checkout")
+                }
+                else
+                {
+                  @Html.Action("TotalItensList", "EventList")
+                }
+              }
+
+            </a>
+          </div>
+          <div class="ui searchMobile mobile only">
+            <div class="ui button icon centered">
               <i class="search icon"></i>
             </div>
-            <div class="results"></div>
+            <div class="ui blocoBusca @_classSearch">
+              <div class="ui icon input fluid">
+                <input class="prompt" type="text" placeholder="Buscar...">
+                <i class="search icon"></i>
+              </div>
+              <div class="results"></div>
+            </div>
           </div>
         </div>
         @{
@@ -45,37 +63,18 @@
                         </div>
                       }
         }
-        <div class="ui right aligned eight wide mobile three wide tablet three wide computer column">
-          <div id="cartButton" class="ui labeled button cartbutton no margin bottom @_classMiniCart" tabindex="0" data-segment="@(Session["segment"] != null ? Session["segment"] : "b2c")">
-            <div class="ui basic primary button ">
-              <i class="cart icon"></i>
-              <span>@(Session["idEventList"] == null && Session["EventList"] == null ? "Meu Carrinho" : "Minha Lista")</span>
-            </div>
-            <a class="ui left pointing primary label" id="total_itens_card">
-              @{
-                if (Session["EventList"] == null)
-                {
-                  @Html.Action("TotalItensCart", "Checkout")
-                }
-                else
-                {
-                  @Html.Action("TotalItensList", "EventList")
-                }
-              }
-
-            </a>
-          </div>
-          <div class="ui searchMobile mobile only">
-            <div class="ui button icon centered">
+        <div class="ui five wide mobile five wide tablet four wide computer column">
+          <a href="/Home" title="Página Inicial">
+            <img class="ui middle aligned image logo" src="/assets/image/logo/logo.png" alt="@LojaCorp.Control.Company._Company.FantasyName" title="@LojaCorp.Control.Company._Company.FantasyName">
+          </a>
+        </div>
+        <div class="ui center aligned six wide tablet seven wide computer column searchcolumn">
+          <div class="ui category @_classSearch">
+            <div class="ui icon input fluid">
+              <input class="prompt" type="text" placeholder="Buscar...">
               <i class="search icon"></i>
             </div>
-            <div class="ui blocoBusca @_classSearch">
-              <div class="ui icon input fluid">
-                <input class="prompt" type="text" placeholder="Buscar...">
-                <i class="search icon"></i>
-              </div>
-              <div class="results"></div>
-            </div>
+            <div class="results"></div>
           </div>
         </div>
       </div>
